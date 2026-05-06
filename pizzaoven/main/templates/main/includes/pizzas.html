@@ -1,0 +1,37 @@
+{% load static %}
+<div class="card" data-slug="{{ pizza.slug }}" data-price30="{{ pizza.sell_price_30 }}"
+    data-price35="{{ pizza.sell_price_35 }}" data-price40="{{ pizza.sell_price_40 }}"
+    data-category="{{ pizza.category.slug }}"
+    data-spicy="{{ pizza.is_spicy|yesno:'true,false' }}"
+    data-vegetarian="{{ pizza.is_vegetarian|yesno:'true,false' }}"
+    data-popular="{{ pizza.is_popular|yesno:'true,false' }}"
+    data-new="{{ pizza.is_new|yesno:'true,false' }}"
+    data-name="{{ pizza.name }}">
+    <div class="card-content">
+        <div class="card-wrapper-img">
+            <img src="{{ pizza.image_url }}" alt="{{ pizza.name }}" />
+        </div>
+        <div class="card-name-wrapper">
+            <div class="card-name">{{ pizza.name }}</div>
+            <div class="card-price">{{ pizza.price_30 }} ₽</div>
+        </div>
+        <div class="card-info">
+            {{ pizza.description }}
+        </div>
+    </div>
+
+    <div class="card-sizes-wrapper">
+        <div class="card-sizes">
+            <button class="size-button" data-size="30" data-price="{{ pizza.sell_price_30 }}">30см</button>
+            <button class="size-button" data-size="35" data-price="{{ pizza.sell_price_35 }}">35см</button>
+            <button class="size-button" data-size="40" data-price="{{ pizza.sell_price_40 }}">40см</button>
+        </div>
+        <div class="card-cart">
+            <form method="post" action="{% url 'cart_add' pizza.slug %}" class="add-to-cart-form">
+                {% csrf_token %}
+                <input type="hidden" name="size" class="selected-size-input" value="30">
+                <button type="submit" class="to-cart-button">В корзину </button>
+            </form>
+        </div>
+    </div>
+</div>

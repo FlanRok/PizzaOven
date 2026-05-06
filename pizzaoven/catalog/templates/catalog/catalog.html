@@ -1,0 +1,261 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}" /> {% endblock%}
+{% block title %}Каталог {% endblock %}
+{% block main %}
+<section class="hero-section">
+    <h1>Наше меню</h1>
+    <hr />
+    <h3>
+        Более 50 видов пиццы на любой вкус. Только свежие ингредиенты и итальянские
+        рецепты.
+    </h3>
+</section>
+
+<div class="filter-sort-panel">
+    <div class="filter-group">
+        <label>Категория:</label>
+        <select id="filterCategory">
+            <option value="all">Все</option>
+            {% for cat in categories %}
+            <option value="{{ cat.slug }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>Признаки:</label>
+        <label><input type="checkbox" id="filterSpicy"> Острая</label>
+        <label><input type="checkbox" id="filterVegetarian"> Вегетарианская</label>
+        <label><input type="checkbox" id="filterPopular"> Популярная</label>
+        <label><input type="checkbox" id="filterNew"> Новинка</label>
+    </div>
+    <div class="sort-group">
+        <label>Сортировать:</label>
+        <select id="sortSelect">
+            <option value="default">По умолчанию</option>
+            <option value="price_asc">Сначала дешевле</option>
+            <option value="price_desc">Сначала дороже</option>
+            <option value="name_asc">По названию (А-Я)</option>
+            <option value="name_desc">По названию (Я-А)</option>
+        </select>
+    </div>
+    <button id="resetFilters" class="reset-btn">Сбросить</button>
+</div>
+
+<div class="modal"></div>
+
+<section class="menu-section">
+    <div class="cards-wrapper">
+        {% for pizza in pizzas %}
+        {% include 'main/includes/pizzas.html' %}
+        {% endfor %}
+
+    </div>
+</section>
+
+{% endblock %}
+{% block js %}
+<script>
+    function initCardSizeHandlers() {
+        document.querySelectorAll('.card').forEach(card => {
+            const sizeButtons = card.querySelectorAll('.size-button');
+            const hiddenSizeInput = card.querySelector('.selected-size-input');
+            const priceElement = card.querySelector('.card-price');
+
+            sizeButtons.forEach(button => {
+                button.removeEventListener('click', handleSizeClick);
+                button.addEventListener('click', handleSizeClick);
+            });
+
+            function handleSizeClick(e) {
+                const btn = e.currentTarget;
+                const container = btn.closest('.card');
+                const btns = container.querySelectorAll('.size-button');
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const selectedSize = btn.dataset.size;
+                const selectedPrice = btn.dataset.price;
+                if (hiddenSizeInput) hiddenSizeInput.value = selectedSize;
+                if (priceElement && selectedPrice) {
+                    priceElement.textContent = `${selectedPrice} ₽`;
+                }
+            }
+
+            if (sizeButtons.length && !card.querySelector('.size-button.active')) {
+                sizeButtons[0].click();
+            }
+        });
+    }
+
+    function cacheCards() {
+        allCards = Array.from(document.querySelectorAll('.card'));
+    }
+
+    function applyFiltersAndSort() {
+        const category = document.getElementById('filterCategory').value;
+        const spicy = document.getElementById('filterSpicy').checked;
+        const vegetarian = document.getElementById('filterVegetarian').checked;
+        const popular = document.getElementById('filterPopular').checked;
+        const newPizza = document.getElementById('filterNew').checked;
+        const sortBy = document.getElementById('sortSelect').value;
+
+        let filtered = allCards.filter(card => {
+            if (category !== 'all' && card.dataset.category !== category) return false;
+            if (spicy && card.dataset.spicy !== 'true') return false;
+            if (vegetarian && card.dataset.vegetarian !== 'true') return false;
+            if (popular && card.dataset.popular !== 'true') return false;
+            if (newPizza && card.dataset.new !== 'true') return false;
+            return true;
+        });
+
+        if (sortBy === 'price_asc') {
+            filtered.sort((a, b) => parseFloat(a.dataset.price30) - parseFloat(b.dataset.price30));
+        } else if (sortBy === 'price_desc') {
+            filtered.sort((a, b) => parseFloat(b.dataset.price30) - parseFloat(a.dataset.price30));
+        } else if (sortBy === 'name_asc') {
+            filtered.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+        } else if (sortBy === 'name_desc') {
+            filtered.sort((a, b) => b.dataset.name.localeCompare(a.dataset.name));
+        } else {
+            filtered.sort((a, b) => allCards.indexOf(a) - allCards.indexOf(b));
+        }
+
+        const wrapper = document.querySelector('.cards-wrapper');
+        wrapper.innerHTML = '';
+        filtered.forEach(card => wrapper.appendChild(card.cloneNode(true)));
+
+        initCardSizeHandlers();
+    }
+
+    function resetFilters() {
+        document.getElementById('filterCategory').value = 'all';
+        document.getElementById('filterSpicy').checked = false;
+        document.getElementById('filterVegetarian').checked = false;
+        document.getElementById('filterPopular').checked = false;
+        document.getElementById('filterNew').checked = false;
+        document.getElementById('sortSelect').value = 'default';
+        applyFiltersAndSort();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        cacheCards();
+        initCardSizeHandlers();
+
+        const controls = ['filterCategory', 'filterSpicy', 'filterVegetarian', 'filterPopular', 'filterNew', 'sortSelect'];
+        controls.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('change', applyFiltersAndSort);
+        });
+
+        const resetBtn = document.getElementById('resetFilters');
+        if (resetBtn) resetBtn.addEventListener('click', resetFilters);
+    });
+
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    function updateCartCounter(total) {
+        const counterSpan = document.getElementById('cart-quantity');
+        if (counterSpan) {
+            counterSpan.textContent = total;
+            counterSpan.style.display = total > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    document.addEventListener('submit', async function (e) {
+        const form = e.target.closest('.add-to-cart-form');
+        if (!form) return;
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const url = form.action;
+
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            });
+            const data = await response.json();
+            if (data.success) {
+                updateCartCounter(data.total_quantity);
+            } else {
+                alert(data.message || 'Ошибка');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    });
+
+    const modalElement = document.querySelector('.modal');
+    document.querySelector('.cards-wrapper').addEventListener('click', (event) => {
+        const cardElement = event.target.closest('.card');
+        if (!cardElement || event.target.tagName !== 'IMG') return;
+
+        const slug = cardElement.dataset.slug;
+        const name = cardElement.querySelector('.card-name').textContent;
+        const description = cardElement.querySelector('.card-info').textContent;
+        const price30 = cardElement.dataset.price30;
+        const price35 = cardElement.dataset.price35;
+        const price40 = cardElement.dataset.price40;
+        const imgSrc = cardElement.querySelector('.card-wrapper-img img').src;
+        const originalForm = cardElement.querySelector('.add-to-cart-form');
+        const actionUrl = originalForm.getAttribute('action');
+
+        modalElement.innerHTML = `
+        <button class="close-modal-button">x</button>
+        <div class="card-content">
+            <div class="card-wrapper-img">
+                <img src="${imgSrc}" alt="${name}">
+            </div>
+            <div class="card-name-wrapper">
+                <div class="card-name">${name}</div>
+                <div class="card-price">${price30} ₽</div>
+            </div>
+            <div class="card-info">${description}</div>
+        </div>
+        <div class="card-sizes-wrapper">
+            <div class="card-sizes">
+                <button class="size-button" data-size="30" data-price="${price30}">30см</button>
+                <button class="size-button" data-size="35" data-price="${price35}">35см</button>
+                <button class="size-button" data-size="40" data-price="${price40}">40см</button>
+            </div>
+            <div class="card-cart">
+                <form class="add-to-cart-form" action="${actionUrl}" method="post">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                    <input type="hidden" name="size" class="selected-size-input" value="30">
+                    <button type="submit" class="to-cart-button">В корзину</button>
+                </form>
+            </div>
+        </div>
+    `;
+
+        modalElement.classList.add('modal-open');
+
+        const modalSizeButtons = modalElement.querySelectorAll('.size-button');
+        const modalHiddenSize = modalElement.querySelector('.selected-size-input');
+        const modalPriceElement = modalElement.querySelector('.card-price');
+
+        modalSizeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modalSizeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                modalHiddenSize.value = btn.dataset.size;
+                if (modalPriceElement) {
+                    modalPriceElement.textContent = `${btn.dataset.price} ₽`;
+                }
+            });
+        });
+        if (modalSizeButtons.length) modalSizeButtons[0].click();
+
+        modalElement.querySelector('.close-modal-button').addEventListener('click', () => {
+            modalElement.classList.remove('modal-open');
+        });
+    });
+</script>
+{% endblock %}

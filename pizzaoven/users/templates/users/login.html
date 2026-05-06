@@ -1,0 +1,44 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="{% static 'users/css/registration.css' %}">
+    
+</head>
+<body>
+     
+<div class="register-card">
+    <h1>Добро пожаловать</h1>
+    <div class="subhead-wrapper">
+        <span class="form-subhead">Заполните поля для входа</span>
+    </div>
+
+    <form action="{% url 'login' %}" method="post" id="registerForm">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <p>{{ form.non_field_errors }}</p>
+        {% endif %}
+
+        <div class="field-group">
+            <label for="id_username">Логин</label>
+            <input type="text" id="id_username" name="username" placeholder="Введите логин" autocomplete="name" required>
+        </div>
+
+        <div class="field-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="register-btn">Войти</button>
+        <div class="simple-divider"></div>
+
+        <div class="login-prompt">
+            Нет аккаунта?<a href="{% url 'registration' %}">Регистрация</a>
+        </div> 
+    </form>
+</div>
+    
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'orders/css/order_form.css' %}"> {% endblock %}
+{% block title %}Оформление заказа{% endblock %}
+{% block main %}
+<div class="order-form-wrapper">
+    <div class="order-form-inner-wrapper">
+        <h1>Оформление заказа</h1>
+        <div class="cart-preview">
+            <h2>Ваш заказ</h2>
+            {% for cart in carts %}
+            <div class="order-item-preview">
+                <p>{{ cart.pizza.name }} ({{ cart.get_size_display }}) x{{ cart.quantity }} = <span>{{ cart.pizzas_price }} ₽</span>
+                </p>
+            </div>
+            {% endfor %}
+            <p><strong>Итого: {{ carts.total_price }} ₽</strong></p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="address">Адрес доставки *</label>
+                <input type="text" id="address" placeholder="Введите адрес" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Телефон *</label>
+                <input type="tel" id="phone" placeholder="Введите номер телефона" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="comment">Комментарий</label>
+                <textarea id="comment" placeholder="Введите дополнительный комментарий" name="comment" rows="3"></textarea>
+            </div>
+            <button type="submit" class="order-submit-button">Подтвердить заказ</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

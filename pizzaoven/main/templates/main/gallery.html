@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}О нас {% endblock %}
+{% block head %} <link rel="stylesheet" href="{% static 'main/css/gallery.css' %}" /> {% endblock %}
+{% block main %}
+<div class="gallery-section">
+    <h1>Наша галерея</h1>
+    <div class="gallery-filter">
+        <button class="filter-btn active" data-filter="all">Все</button>
+        {% for value, label in categories.items %}
+            <button class="filter-btn" data-filter="{{ value }}">{{ label }}</button>
+        {% endfor %}
+    </div>
+    <div class="gallery-grid">
+        {% for image in images %}
+            <div class="gallery-item" data-category="{{ image.category }}">
+                    <img src="{{ image.image.url }}" alt="{{ image.title }}">
+                <div class="item-info">
+                    <h3>{{ image.title }}</h3>
+                    <p>{{ image.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+const filterBtns = document.querySelectorAll('.filter-btn');
+const items = document.querySelectorAll('.gallery-item');
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        items.forEach(item => {
+            if (filter === 'all' || item.dataset.category === filter) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

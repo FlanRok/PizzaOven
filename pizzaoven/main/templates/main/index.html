@@ -1,0 +1,111 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/index.css' %}"> {% endblock %}
+{% block title %}Главная {% endblock %}
+{% block main %}
+<section class="hero-section">
+    <h1>Добро пожаловать</h1>
+    <h2>Pizza<span class="hero-section-symbol">&</span>Oven</h2>
+    <hr>
+    <h3>Пиццерия</h3>
+    <a href="{% url 'catalog' %}" class="menu-button">Меню</a>
+    <img class="left-pizza pizza-item" src="{% static 'main/img/tomato.png' %}" alt="">
+    <img class="right-pizza pizza-item" src="{% static 'main/img/rosemary.png' %}" alt="">
+</section>
+
+<section class="history-section">
+    <div class="history-wrapper">
+        <div class="history-text-wrapper">
+            <h4>Открой для себя</h4>
+            <h3>Наша История</h2>
+                <hr>
+                <p>В 2010 году два друга, Вася 1 и Вася 2, открыли небольшую пиццерию на
+                    окраине города. У них была мечта - привнести настоящий итальянский
+                    вкус пиццы в наш город. Начав с маленькой кухни и всего трех видов
+                    пиццы, они каждый день старались совершенствовать рецепты.</p>
+                <a href="{% url 'about' %}" class="history-button">Больше</a>
+        </div>
+        <div class="history-img-wrapper"></div>
+    </div>
+</section>
+
+<section class="new-items-section">
+    <h3>Новинки в меню</h3>
+    <hr>
+    <h4>Попробуйте наши новые вкусы</h4>
+    <div class="new-items-wrapper">
+        {% for pizza in new_pizzas %}
+        {% include 'main/includes/pizzas.html' %}
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+{% block js %}
+<script>
+    document.querySelectorAll('.card').forEach(card => {
+        const sizeButtons = card.querySelectorAll('.size-button');
+        const hiddenSizeInput = card.querySelector('.selected-size-input');
+
+        sizeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                sizeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                const selectedSize = this.dataset.size;
+                const selectedPrice = this.dataset.price;
+
+                hiddenSizeInput.value = selectedSize;
+
+                const priceElement = this.closest('.card').querySelector('.card-price')
+                if (priceElement && selectedPrice) {
+                    priceElement.textContent = `${selectedPrice} ₽`
+                }
+            });
+        });
+
+        if (sizeButtons.length > 0) {
+            sizeButtons[0].click();
+        }
+    });
+
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    function updateCartCounter(total) {
+        const counterSpan = document.getElementById('cart-quantity');
+        if (counterSpan) {
+            counterSpan.textContent = total;
+            counterSpan.style.display = total > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    document.addEventListener('submit', async function (e) {
+        const form = e.target.closest('.add-to-cart-form');
+        if (!form) return;
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const url = form.action;
+
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            });
+            const data = await response.json();
+            if (data.success) {
+                updateCartCounter(data.total_quantity);
+            } else {
+                alert(data.message || 'Ошибка');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    });
+</script>
+{% endblock %}

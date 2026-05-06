@@ -1,0 +1,130 @@
+  .contacts-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+  }
+
+  h1 {
+      text-align: center;
+      color: #d32f2f;
+      margin-bottom: 40px;
+  }
+
+  .contacts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 50px;
+  }
+
+  .contact-info {
+      background: #f9f9f9;
+      font-size: 20px;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .contact-info h2 {
+      margin-top: 0;
+      color: #333;
+      border-left: 5px solid #f0b90b;
+      padding-left: 15px;
+  }
+
+  .info-block {
+      margin: 20px 0;
+  }
+
+  .info-block strong {
+      display: inline-block;
+      width: 120px;
+      color: #555;
+  }
+
+  .info-block p {
+      display: inline-block;
+      margin: 0;
+  }
+
+  .work-hours {
+      background: #fff3e0;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+      font-size: 20px;
+  }
+
+  .work-hours p {
+      padding: 2px;
+      margin: 0;
+  }
+
+  .map-container {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .map-container iframe {
+      width: 100%;
+      height: 350px;
+      border: 0;
+  }
+
+  .contact-form {
+      background: var(--second-color);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin-top: 30px;
+      color:white;
+  }
+
+  .contact-form h2 {
+      margin-top: 0;
+  }
+
+
+
+  form p {
+      display: flex;
+      flex-direction: column;
+  }
+  form p label{
+    font-size: 20px;
+  }
+
+  .form-control {
+      width: 95%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+  }
+
+  .form-control:focus {
+      outline: none;
+      border-color: #f0b90b;
+  }
+
+  button[type="submit"] {
+      background: #f0b90b;
+      border: none;
+      padding: 12px 25px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button[type="submit"]:hover {
+      background: #d4a00a;
+  }
+
+  @media (max-width: 768px) {
+      .contacts-grid {
+          grid-template-columns: 1fr;
+      }
+  }

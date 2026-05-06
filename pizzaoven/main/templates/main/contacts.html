@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/contacts.css' %}">{% endblock %}
+{% block title %}Контакты{% endblock %}
+{% block main %}
+<div class="contacts-container">
+    <h1>Контакты</h1>
+
+    <div class="contacts-grid">
+        <div class="contact-info">
+            <h2>Как нас найти</h2>
+            <div class="info-block">
+                <strong>Адрес:</strong>
+                <p>Ул. Пиццерийная д. 1</p>
+            </div>
+            <div class="info-block">
+                <strong>Телефон:</strong>
+                <p>+7 999 999 99-99</p>
+            </div>
+            <div class="info-block">
+                <strong>Email:</strong>
+                <p>pizza@pizza.ru</p>
+            </div>
+            <div class="info-block">
+                <strong>Режим работы:</strong>
+                <p>с 10:00 до 22:00</p>
+            </div>
+            <div class="work-hours">
+                <strong>☎️ Заказ по телефону:</strong> +7 999 999 99-99<br>
+                <p>Принимаем заказы на доставку с 10:00 до 20:00</p>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <iframe
+                src="https://yandex.ru/map-widget/v1/?um=constructor%3A2034cba461d1908ce4826d8d30c9a09511ab01b63968db47e51f514fbf9d094b&amp;source=constructor"
+                width="500" height="400" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <div class="contact-form">
+        <h2>Напишите нам</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-submit">Отправить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

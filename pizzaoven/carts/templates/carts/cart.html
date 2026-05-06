@@ -1,0 +1,151 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'carts/css/cart.css' %}" />
+{%endblock %}
+{% block title %}Корзина {% endblock %}
+{% block main %}
+<div class="cart-wrapper">
+    <div class="cart">
+        <h1>Корзина</h1>
+        {% if carts %}
+        {% for cart in carts %}
+
+        <section class="order-section" data-cart-id="{{ cart.id }}">
+            <div class="order-info">
+                <div class="order-name">
+                    <img src="{{ cart.pizza.image_url}}" alt="">
+                    <p>{{cart.pizza.name}}</p>
+                </div>
+                <div class="order-size">
+                    <p>{{cart.size}} см</p>
+                </div>
+
+                <div class="order-quantity">
+                    <button type="button" class="quantity-button decrement" data-url="{% url 'cart_change' cart.id %}">-</button>
+                    <p class="item-quantity">{{cart.quantity}}</p>
+                    <button type="button" class="quantity-button increment" data-url="{% url 'cart_change' cart.id %}">+</button>
+                </div>
+            </div>
+
+            <div class="order-price">
+                <p class="item-price">{{cart.pizzas_price}}</p>
+            </div>
+            <div class="order-remove">
+                <button class="remove-button" data-url="{% url 'cart_remove' cart.id %}">Удалить</button>
+            </div>
+        </section>
+        {% endfor%}
+        <section class="price-section">
+            <h2>Стоимость заказа</h2>
+            <div class="row">
+                <h3>Количество</h3>
+                <p id="cart-total-quantity">{{carts.total_quantity}}</p>
+            </div>
+            <div class="row">
+                <h3>Итого </h3>
+                <p id="cart-total-price">{{carts.total_price}}</p>
+            </div>
+            <a href="{% url 'orders:order_create' %}" class="order-create-button">Оформить заказ</a>
+        </section>
+        {%else %}
+        <h2>Ваша корзина пустая</h1>
+            {% endif %}
+    </div>
+{% endblock %}
+{% block js %}
+<script>
+    function getCSRFToken() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='));
+        return cookieValue ? cookieValue.split('=')[1] : '';
+    }
+
+    function updateCartCounter(total) {
+        const counterSpan = document.getElementById('cart-quantity');
+        if (counterSpan) {
+            counterSpan.textContent = total;
+        }
+    }
+
+    document.querySelectorAll('.quantity-button').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            const action = this.classList.contains('increment') ? 'increase' : 'decrease';
+            const url = this.dataset.url;
+            const orderSection = this.closest('.order-section');
+            const cartId = orderSection.dataset.cartId;
+            const quantitySpan = orderSection.querySelector('.item-quantity');
+            const priceSpan = orderSection.querySelector('.item-price');
+
+            try {
+                const formData = new FormData();
+                formData.append('action', action);
+                formData.append('csrfmiddlewaretoken', getCSRFToken());
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.success) {
+                    if (data.deleted) {
+                        // Если позиция удалена (при decrease с quantity=1)
+                        orderSection.remove();
+                    } else {
+                        // Обновляем количество и цену позиции
+                        quantitySpan.textContent = data.new_quantity;
+                        priceSpan.textContent = data.new_item_price;
+                    }
+                    // Обновляем итоги корзины
+                    document.getElementById('cart-total-quantity').textContent = data.total_quantity;
+                    document.getElementById('cart-total-price').textContent = data.total_price;
+                    updateCartCounter(data.total_quantity);
+
+                    // Если корзина пуста – показываем сообщение
+                    if (data.total_quantity === 0) {
+                        document.querySelector('.cart').innerHTML = '<h2>Ваша корзина пустая</h2>';
+                    }
+                } else {
+                    alert(data.message || 'Ошибка изменения количества');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        });
+    });
+
+    // Удаление товара (уже есть, но добавим актуальный код)
+    document.querySelectorAll('.remove-button').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            const url = this.dataset.url;
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    this.closest('.order-section').remove();
+                    document.getElementById('cart-total-quantity').textContent = data.total_quantity;
+                    document.getElementById('cart-total-price').textContent = data.total_price;
+                    updateCartCounter(data.total_quantity);
+                    if (data.total_quantity === 0) {
+                        document.querySelector('.cart').innerHTML = '<h2>Ваша корзина пустая</h2>';
+                    }
+                } else {
+                    alert(data.message || 'Ошибка удаления');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        });
+    });
+</script>
+{% endblock %}

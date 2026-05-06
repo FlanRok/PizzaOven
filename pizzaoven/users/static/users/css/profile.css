@@ -1,0 +1,242 @@
+.profile-wrapper{
+    display: flex;
+    justify-content: center;
+    margin-inline: 50px;
+    gap:15px;
+    padding-bottom: 25px;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.modal-content {
+  background: white;
+  margin: 10% auto;
+  padding: 20px;
+  width: 500px;
+  border-radius: 10px;
+  position: relative;
+  border: 2px solid var(--second-color);
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 28px;
+  cursor: pointer;
+}
+#modal-body h2{
+  font-size: 32px;
+}
+#modal-body h3{
+  font-size: 22px;
+}
+#modal-body p{
+  font-size: 20px;
+}
+#modal-body ul li{
+  font-size: 20px;
+}
+.form-wrapper{
+    display: flex;
+    justify-content: center;
+}
+.form-items{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    background-color: var(--second-color);
+    padding: 15px;
+    border-radius: 5px;
+}
+.form-items h1{
+    align-self: center;
+    color:white;
+}
+.avatar-img{
+    align-self: center;
+    width: 200px;
+    border-radius: 10%;
+    background-color: white;
+    margin-bottom: 10px;
+}
+.input-item{
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    color:white;
+}
+.input-item input{
+    padding: 10px;
+    background-color: white;
+    border: 1px solid var(--header-border-color);
+    font-size: 20px;
+    border-radius: 10px;
+    font-family: var(--font-family-alumni);
+    font-weight: bold;
+}
+input[type="file"]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: rgb(199, 0, 0);
+  padding: 10px 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+  font-family: var(--font-family-alumni);
+font-weight: bold;
+}
+input[type="file"]{
+    color:black;
+}
+.user-change-button{
+    padding: 5px 0px;
+    background-color: white;
+    border: 1px solid var(--header-border-color);
+    border-radius: 5px;
+    transition: var(--button-transitions);
+    font-family: var(--font-family-alumni);
+    font-weight: bold;
+    font-size: 24px;
+}
+.user-change-button:hover{
+    background-color: rgb(185, 0, 0);
+    color:white;
+}
+
+.order-list-wrapper{
+    background-color: var(--second-color);
+    color:white;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.order-card a{
+    color:black;
+    text-decoration: none;
+    font-size: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap:80px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+.orders-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+}
+.orders-empty{
+    font-size: 20px;
+}
+
+@media (max-width: 1024px) {
+  .profile-wrapper {
+    flex-direction: column;
+    align-items: center;
+    margin-inline: 30px;
+    gap: 30px;
+  }
+  .form-wrapper {
+    width: 100%;
+    max-width: 500px;
+  }
+  .order-list-wrapper {
+    width: 100%;
+    max-width: 500px;
+  }
+  .order-card a {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-wrapper {
+    flex-direction: column;
+    align-items: center;
+    margin-inline: 15px;
+    gap: 20px;
+  }
+  .form-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+  .order-list-wrapper {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+  }
+  .avatar-img {
+    width: 120px;
+  }
+  .input-item label {
+    font-size: 18px;
+  }
+  .input-item input {
+    font-size: 16px;
+    padding: 8px;
+  }
+  input[type="file"]::file-selector-button {
+    font-size: 16px;
+    padding: 6px 10px;
+  }
+  .user-change-button {
+    font-size: 20px;
+    padding: 8px 0;
+  }
+  .order-card a {
+    font-size: 18px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 0;
+  }
+  .order-card a div {
+    font-size: 16px;
+  }
+  .orders-empty {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-wrapper {
+    margin-inline: 10px;
+  }
+  .avatar-img {
+    width: 100px;
+  }
+  .form-items h1 {
+    font-size: 24px;
+  }
+  .input-item label {
+    font-size: 16px;
+  }
+  .input-item input {
+    font-size: 14px;
+  }
+  .user-change-button {
+    font-size: 18px;
+  }
+  .order-card a {
+    font-size: 16px;
+  }
+  .order-card a div {
+    font-size: 14px;
+  }
+}
