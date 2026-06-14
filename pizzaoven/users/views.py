@@ -35,7 +35,7 @@ def registration(request):
             form.save()
             user = form.instance
             auth.login(request, user)
-            messages.success(request, f"{user.username}, Вы успешно зарегистрированы вошли в аккаунт")
+            messages.success(request, f"{user.username}, Вы успешно зарегистрированы")
             return HttpResponseRedirect(reverse('index'))
     else:
         form = UserRegistrationForm()

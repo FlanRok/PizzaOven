@@ -64,7 +64,7 @@
       <div class="mobile-actions">
         <a href="{% url 'cart' %}" class="mobile-cart-link">
           <i class="fa fa-shopping-cart"></i>
-  
+
         </a>
         <label for="burger-toggle" class="burger-icon">
           <span></span><span></span><span></span>
@@ -108,7 +108,31 @@
     {% endfor %}
   </div>
   {% endif %}
-  <main>{% block main %} {% endblock %}</main>
+  <main class="main-content">{% block main %} {% endblock %}</main>
+  <footer>
+    <div class="footer-container">
+      <div class="footer-social">
+        <h3>Контакты</h3>
+        <div class="contacts-row">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>pizza@pizza.ru</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <span>+7 (999) 999-99-99</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Ульяновск, Россия</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 PizzaOven. Все права защищены.
+    </div>
+  </footer>
   {% block js %} {% endblock %}
 </body>
 

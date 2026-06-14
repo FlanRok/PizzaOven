@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     color:white;
+    padding-block: 15px;
 }
 .cart{
     background-color: var(--second-color);

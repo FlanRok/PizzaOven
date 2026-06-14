@@ -5,7 +5,8 @@
   --font-family-alumni: "Alumni Sans Pinstripe", sans-serif;
   --margin-inline: 250px;
   --button-transitions: 0.3s;
-  --main-color: rgb(158, 5, 5);;
+  --main-color: rgb(158, 5, 5);
+  ;
   --second-color: #b46634;
 }
 
@@ -69,15 +70,18 @@ header {
   transition: var(--button-transitions);
   height: 20px;
   user-select: none;
-  gap:15px;
+  gap: 15px;
 }
-.profile-item p{
+
+.profile-item p {
   font-size: 24px
 }
+
 .profile-item:hover {
   color: var(--main-color);
   background-color: rgb(199, 192, 192);
 }
+
 .right-content a {
   color: var(--main-color);
   text-decoration: none;
@@ -92,7 +96,8 @@ header {
 .logo {
   user-select: none;
 }
-.logo a img:hover{
+
+.logo a img:hover {
   transform: rotate(360deg);
 }
 
@@ -120,6 +125,7 @@ nav ul li a {
   font-weight: bold;
   transition: var(--button-transitions);
 }
+
 nav ul li a:after {
   content: " ";
   display: block;
@@ -132,12 +138,15 @@ nav ul li a:after {
 nav ul li:hover {
   transform: scale(1.1);
 }
+
 nav ul li:active {
   transform: scale(1);
 }
+
 nav ul li a:hover {
   color: red;
 }
+
 nav ul li a:hover:after {
   width: 100%;
 }
@@ -154,7 +163,7 @@ nav ul li a:hover:after {
   transition: var(--button-transitions);
   user-select: none;
   text-decoration: none;
-  color:black;
+  color: black;
 }
 
 .reserve-button:hover {
@@ -163,54 +172,65 @@ nav ul li a:hover:after {
   color: white;
   border-color: white;
 }
+
 .reserve-button:active {
   transform: scale(1);
 }
-button{
+
+button {
   font-family: var(--font-family-alumni);
   font-weight: bold;
   font-size: 18px;
 }
 
 .messages {
-    position: fixed;
-    top: 20px;
-    right: 0px;
-    z-index: 1000;
-    width: 300px;
-    padding: 20px;
-    font-size: 20px;
-    pointer-events: none;
+  position: fixed;
+  top: 20px;
+  right: 0px;
+  z-index: 1000;
+  width: 300px;
+  padding: 20px;
+  font-size: 20px;
+  pointer-events: none;
 }
 
 .alert {
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    color: white;
-    animation: fadeOut 1.5s forwards;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: white;
+  animation: fadeOut 1.5s forwards;
 }
 
 .alert-success {
-    background-color: #4CAF50;
+  background-color: #4CAF50;
 }
 
 .alert-error {
-    background-color: #f44336;
+  background-color: #f44336;
 }
 
 .alert-warning {
-    background-color: #ff9800;
+  background-color: #ff9800;
 }
 
 .alert-info {
-    background-color: #2196F3;
+  background-color: #2196F3;
 }
 
 @keyframes fadeOut {
-    0% { opacity: 1; }
-    70% { opacity: 1; }
-    100% { opacity: 0; display: none; }
+  0% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+  }
 }
 
 .burger-toggle {
@@ -235,13 +255,15 @@ button{
   border-radius: 2px;
 }
 
-#burger-toggle:checked + .burger-icon span:nth-child(1) {
+#burger-toggle:checked+.burger-icon span:nth-child(1) {
   transform: translateY(9px) rotate(45deg);
 }
-#burger-toggle:checked + .burger-icon span:nth-child(2) {
+
+#burger-toggle:checked+.burger-icon span:nth-child(2) {
   opacity: 0;
 }
-#burger-toggle:checked + .burger-icon span:nth-child(3) {
+
+#burger-toggle:checked+.burger-icon span:nth-child(3) {
   transform: translateY(-9px) rotate(-45deg);
 }
 
@@ -264,6 +286,7 @@ button{
   display: flex;
   align-items: center;
 }
+
 .mobile-cart-count {
   position: absolute;
   top: -8px;
@@ -280,22 +303,78 @@ button{
   font-weight: bold;
 }
 
+footer {
+  background-color: var(--second-color);
+  color: white;
+  padding: 16px
+}
+
+.footer-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-social h3 {
+  font-size: 32px;
+  margin-bottom: 1.2rem;
+}
+
+.contacts-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1.8rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 24px;
+}
+
+.contact-item i {
+  font-size: 24px;
+  width: 24px;
+}
+
+.contact-item span {
+  opacity: 0.9;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 1.8rem;
+  margin-top: 1.8rem;
+  border-top: 1px solid white;
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+
 @media (max-width: 1680px) {
   :root {
     --margin-inline: 50px;
   }
-  header{
-    margin-inline:50px;
+
+  header {
+    margin-inline: 50px;
   }
+
   .upper-header {
     font-size: 14px;
   }
+
   .left-content-item {
     font-size: 18px;
   }
+
   nav ul li a {
     font-size: 24px;
   }
+
   .reserve-button {
     font-size: 20px;
   }
@@ -305,22 +384,28 @@ button{
   :root {
     --margin-inline: 50px;
   }
-  .logo img{
+
+  .logo img {
     width: 75px;
   }
+
   .upper-header {
     font-size: 14px;
   }
+
   .left-content-item {
     font-size: 18px;
   }
+
   nav ul li a {
     font-size: 24px;
   }
-  .lower-header{
+
+  .lower-header {
     justify-content: center;
-    gap:10px;
+    gap: 10px;
   }
+
   .reserve-button {
     font-size: 20px;
   }
@@ -330,7 +415,8 @@ button{
   .upper-header {
     display: none;
   }
-  .lower-header{
+
+  .lower-header {
     justify-content: space-between;
   }
 
@@ -350,12 +436,12 @@ button{
     justify-content: flex-start;
     align-items: flex-start;
     padding: 80px 20px 20px;
-    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease;
     z-index: 1000;
   }
 
-  #burger-toggle:checked ~ .nav-menu {
+  #burger-toggle:checked~.nav-menu {
     right: 0;
   }
 
@@ -382,12 +468,14 @@ button{
     display: none;
   }
 
-   .mobile-actions {
+  .mobile-actions {
     display: flex;
   }
+
   .desktop-reserve {
     display: none;
   }
+
   .mobile-reserve {
     display: block;
     margin-top: 20px;
@@ -400,6 +488,7 @@ button{
     border-top: 1px solid #eee;
     padding-top: 20px;
   }
+
   .mobile-user-actions a {
     display: flex;
     align-items: center;
@@ -410,13 +499,16 @@ button{
     text-decoration: none;
     border-bottom: 1px solid #f0f0f0;
   }
+
   .mobile-user-actions a:last-child {
     border-bottom: none;
   }
+
   .mobile-user-actions i {
     width: 24px;
     font-size: 20px;
   }
+
   #menu-cart-quantity {
     background: red;
     color: white;
@@ -426,12 +518,15 @@ button{
     font-size: 14px;
   }
 }
+
 @media (min-width: 881px) {
+
   .mobile-reserve,
   .mobile-user-actions,
   .mobile-actions {
     display: none;
   }
+
   .desktop-reserve {
     display: inline-block;
   }
