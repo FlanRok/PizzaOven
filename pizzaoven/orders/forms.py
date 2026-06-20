@@ -1,10 +1,46 @@
 from django import forms
+from .models import Order
 import re
 
-class OrderForm(forms.Form):
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = [
+            'address',
+            'phone',
+            'comment',
+            'payment_method'
+        ]
+    def clean_address(self):
+        address = self.cleaned_data['address']
+        address = address.strip()
+
+        if len(address) < 10:
+            raise forms.ValidationError(
+                "Адрес должен содержать минимум 10 символов"
+            )
+
+        if not re.search(r'[а-яА-Яa-zA-Z]', address):
+            raise forms.ValidationError(
+                "Адрес должен содержать название улицы или города"
+            )
+
+        if not re.search(r'\d', address):
+            raise forms.ValidationError(
+                "Укажите номер дома"
+            )
+
+        if not re.match(
+            r'^[а-яА-Яa-zA-Z0-9\s.,\-]+$',
+            address
+        ):
+            raise forms.ValidationError(
+                "Адрес содержит недопустимые символы"
+            )
+
+        return address
     address = forms.CharField(
         max_length=255,
-        min_length=5,
         label='Адрес доставки',
         widget=forms.TextInput(attrs={'placeholder': 'Введите адрес'})
     )

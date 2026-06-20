@@ -19,6 +19,7 @@ def order_create(request):
             address = form.cleaned_data['address']
             phone = form.cleaned_data['phone']
             comment = form.cleaned_data.get('comment', '') 
+            payment_method = form.cleaned_data['payment_method']
 
             total_price = carts.total_price()
             order = Order.objects.create(
@@ -26,7 +27,8 @@ def order_create(request):
                 total_price=total_price,
                 address=address,
                 phone=phone,
-                comment=comment
+                comment=comment,
+                payment_method=payment_method
             )
             for cart_item in carts:
                 OrderItem.objects.create(

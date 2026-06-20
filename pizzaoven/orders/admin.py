@@ -9,14 +9,14 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'created_at', 'total_price', 'status', 'phone')
+    list_display = ('id', 'user', 'created_at', 'total_price', 'status', 'phone', 'payment_method')
     list_filter = ('status', 'created_at')
     search_fields = ('user__username', 'user__email', 'phone', 'address')
     readonly_fields = ('created_at', 'updated_at', 'total_price')
     inlines = [OrderItemInline]
     fieldsets = (
         ('Информация о заказе', {
-            'fields': ('user', 'status', 'total_price', 'address', 'phone', 'comment')
+            'fields': ('user', 'status', 'total_price', 'address', 'phone', 'comment', 'payment_method')
         }),
         ('Даты', {
             'fields': ('created_at', 'updated_at'),
