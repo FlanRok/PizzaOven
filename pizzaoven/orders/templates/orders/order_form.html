@@ -20,17 +20,21 @@
 
         <form method="post">
             {% csrf_token %}
+            
             <div class="form-group">
                 <label for="address">Адрес доставки *</label>
-                <input type="text" id="address" placeholder="Введите адрес" name="address" required>
+                <input type="text" id="address" placeholder="Введите адрес" name="address" value="{{ form_data.address|default:'' }}" required>
+                 {{ form.address.errors }}
             </div>
             <div class="form-group">
                 <label for="phone">Телефон *</label>
-                <input type="tel" id="phone" placeholder="Введите номер телефона" name="phone" required>
+                <input type="tel" id="phone" placeholder="Введите номер телефона" name="phone" value="{{ form_data.phone|default:'' }}" required>
+                 {{ form.phone.errors }}
             </div>
             <div class="form-group">
                 <label for="comment">Комментарий</label>
-                <textarea id="comment" placeholder="Введите дополнительный комментарий" name="comment" rows="3"></textarea>
+                <textarea id="comment" placeholder="Введите дополнительный комментарий" name="comment" rows="3">{{ form_data.comment|default:'' }}</textarea>
+                 {{ form.comment.errors }}
             </div>
             <button type="submit" class="order-submit-button">Подтвердить заказ</button>
         </form>

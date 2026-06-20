@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+import sys
+sys.path.insert(0, str(BASE_DIR.parent))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-k9+f(tap7gpie^(l8$vg_5b%lwp165suzrg3==o$i8(4l=nks^
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'flanrok.pythonanywhere.com'
+    'flanrok.pythonanywhere.com',
+    '127.0.0.1'
 ]
 
 

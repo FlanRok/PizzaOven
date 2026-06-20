@@ -4,7 +4,8 @@ from catalog.models import Pizza
 from carts.models import Cart
 
 # Create your views here.
-
+MAX_QUANTITY = 30
+MAX_TOTAL_QUANTITY = 100
 def cart(request):
     carts = Cart.objects.filter(user=request.user)
     context = {
@@ -19,12 +20,35 @@ def cart_add(request, pizza_slug):
         size = '30'
 
     if request.user.is_authenticated:
+        current_total = sum(
+        c.quantity for c in Cart.objects.filter(user=request.user)
+        )
+
+        if current_total >= MAX_TOTAL_QUANTITY:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'message': f'В корзине не может быть больше {MAX_TOTAL_QUANTITY} товаров'
+                }, status=400)
+            else:
+                return redirect(request.META.get('HTTP_REFERER', 'cart'))
+        
         cart, created = Cart.objects.get_or_create(
             user=request.user,
             pizza=pizza,
             size=size,
             defaults={'quantity': 0}
         )
+
+        if cart.quantity >= MAX_QUANTITY:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'message': f'Нельзя добавить больше {MAX_QUANTITY} шт. товара "{pizza.name}" ({size} см)'
+                }, status=400)
+            else:
+                return redirect(request.META.get('HTTP_REFERER', 'cart'))
+            
         cart.quantity += 1
         cart.save()
 
@@ -52,7 +76,22 @@ def cart_change(request, cart_id):
     action = request.POST.get('action')
 
     if action == 'increase':
+        carts = Cart.objects.filter(user=request.user)
+        total_quantity = carts.total_quantity()
+        
+        if total_quantity >= MAX_TOTAL_QUANTITY:
+            return JsonResponse({
+                'success': False,
+                'message': f'В корзине не может быть больше {MAX_TOTAL_QUANTITY} товаров'
+            }, status=400)
+
+        if cart.quantity >= MAX_QUANTITY:
+            return JsonResponse({
+                'success': False,
+                'message': f'Нельзя добавить больше {MAX_QUANTITY} шт. этого товара'
+            }, status=400)
         cart.quantity += 1
+
     elif action == 'decrease':
         if cart.quantity > 1:
             cart.quantity -= 1
@@ -87,7 +126,6 @@ def cart_change(request, cart_id):
             'cart_id': cart_id,
         })
     else:
-        from django.shortcuts import redirect
         return redirect('cart')
 
 def cart_remove(request, cart_id):

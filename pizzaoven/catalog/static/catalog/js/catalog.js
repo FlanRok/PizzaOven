@@ -1,35 +1,4 @@
-function initCardSizeHandlers() {
-    document.querySelectorAll('.card').forEach(card => {
-        const sizeButtons = card.querySelectorAll('.size-button');
-        const hiddenSizeInput = card.querySelector('.selected-size-input');
-        const priceElement = card.querySelector('.card-price');
-
-        sizeButtons.forEach(button => {
-            button.removeEventListener('click', handleSizeClick);
-            button.addEventListener('click', handleSizeClick);
-        });
-
-        function handleSizeClick(e) {
-            const btn = e.currentTarget;
-            const container = btn.closest('.card');
-            const btns = container.querySelectorAll('.size-button');
-            btns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const selectedSize = btn.dataset.size;
-            const selectedPrice = btn.dataset.price;
-            if (hiddenSizeInput) hiddenSizeInput.value = selectedSize;
-            if (priceElement && selectedPrice) {
-                priceElement.textContent = `${selectedPrice} ₽`;
-            }
-        }
-
-        if (sizeButtons.length && !card.querySelector('.size-button.active')) {
-            sizeButtons[0].click();
-        }
-    });
-}
-
+let allCards = [];
 function cacheCards() {
     allCards = Array.from(document.querySelectorAll('.card'));
 }
@@ -67,7 +36,7 @@ function applyFiltersAndSort() {
     wrapper.innerHTML = '';
     filtered.forEach(card => wrapper.appendChild(card.cloneNode(true)));
 
-    initCardSizeHandlers();
+    initSizeButtons();
 }
 
 function resetFilters() {
@@ -82,7 +51,7 @@ function resetFilters() {
 
 document.addEventListener('DOMContentLoaded', () => {
     cacheCards();
-    initCardSizeHandlers();
+    initSizeButtons();
 
     const controls = ['filterCategory', 'filterSpicy', 'filterVegetarian', 'filterPopular', 'filterNew', 'sortSelect'];
     controls.forEach(id => {
@@ -94,44 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resetBtn) resetBtn.addEventListener('click', resetFilters);
 });
 
-const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-function updateCartCounter(total) {
-    const counterSpan = document.getElementById('cart-quantity');
-    if (counterSpan) {
-        counterSpan.textContent = total;
-        counterSpan.style.display = total > 0 ? 'inline-block' : 'none';
-    }
-}
-
-document.addEventListener('submit', async function (e) {
-    const form = e.target.closest('.add-to-cart-form');
-    if (!form) return;
-    e.preventDefault();
-
-    const formData = new FormData(form);
-    const url = form.action;
-
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: formData
-        });
-        const data = await response.json();
-        if (data.success) {
-            updateCartCounter(data.total_quantity);
-        } else {
-            alert(data.message || 'Ошибка');
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
-});
 
 const modalElement = document.querySelector('.modal');
 document.querySelector('.cards-wrapper').addEventListener('click', (event) => {
@@ -168,7 +99,7 @@ document.querySelector('.cards-wrapper').addEventListener('click', (event) => {
             </div>
             <div class="card-cart">
                 <form class="add-to-cart-form" action="${actionUrl}" method="post">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="${getCSRFToken()}">
                     <input type="hidden" name="size" class="selected-size-input" value="30">
                     <button type="submit" class="to-cart-button">В корзину</button>
                 </form>

@@ -108,6 +108,9 @@
     {% endfor %}
   </div>
   {% endif %}
+
+<div id="notification-container"></div>
+
   <main class="main-content">{% block main %} {% endblock %}</main>
   <footer>
     <div class="footer-container">
@@ -130,9 +133,10 @@
       </div>
     </div>
     <div class="footer-bottom">
-      © 2025 PizzaOven. Все права защищены.
+      © 2026 PizzaOven. Дипломная работа.
     </div>
   </footer>
+  <script src="{% static 'main/js/base.js' %}"></script>
   {% block js %} {% endblock %}
 </body>
 

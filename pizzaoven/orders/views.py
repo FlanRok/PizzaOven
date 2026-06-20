@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from carts.models import Cart
 from .models import Order, OrderItem
+from .forms import OrderForm
 
 @login_required
 def order_create(request):
@@ -13,35 +14,45 @@ def order_create(request):
         return redirect('cart')
 
     if request.method == 'POST':
-        address = request.POST.get('address')
-        phone = request.POST.get('phone')
-        comment = request.POST.get('comment', '')
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            address = form.cleaned_data['address']
+            phone = form.cleaned_data['phone']
+            comment = form.cleaned_data.get('comment', '') 
 
-        if not address or not phone:
-            messages.error(request, "Заполните адрес и телефон")
-            return render(request, 'orders/order_form.html', {'carts': carts})
-
-        total_price = carts.total_price()
-        order = Order.objects.create(
-            user=request.user,
-            total_price=total_price,
-            address=address,
-            phone=phone,
-            comment=comment
-        )
-        for cart_item in carts:
-            OrderItem.objects.create(
-                order=order,
-                pizza=cart_item.pizza,
-                size=cart_item.size,
-                quantity=cart_item.quantity,
-                price=cart_item.get_price()
+            total_price = carts.total_price()
+            order = Order.objects.create(
+                user=request.user,
+                total_price=total_price,
+                address=address,
+                phone=phone,
+                comment=comment
             )
-        carts.delete()
-        messages.success(request, f"Заказ #{order.id} успешно оформлен!")
-        return redirect('profile')
+            for cart_item in carts:
+                OrderItem.objects.create(
+                    order=order,
+                    pizza=cart_item.pizza,
+                    size=cart_item.size,
+                    quantity=cart_item.quantity,
+                    price=cart_item.get_price()
+                )
+            carts.delete()
+            messages.success(request, f"Заказ #{order.id} успешно оформлен!")
+            return redirect('profile')
+        else:
+            context = {
+                'carts': carts,
+                'form': form,
+            }
+            return render(request, 'orders/order_form.html', context)
+    else:
+        form = OrderForm()
 
-    return render(request, 'orders/order_form.html', {'carts': carts})
+    context = {
+        'carts': carts,
+        'form': form,
+    }
+    return render(request, 'orders/order_form.html', context)
 
 @login_required
 def order_list(request):

@@ -1,17 +1,3 @@
-function getCSRFToken() {
-    const cookieValue = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('csrftoken='));
-    return cookieValue ? cookieValue.split('=')[1] : '';
-}
-
-function updateCartCounter(total) {
-    const counterSpan = document.getElementById('cart-quantity');
-    if (counterSpan) {
-        counterSpan.textContent = total;
-    }
-}
-
 document.querySelectorAll('.quantity-button').forEach(button => {
     button.addEventListener('click', async function (e) {
         const action = this.classList.contains('increment') ? 'increase' : 'decrease';
@@ -36,10 +22,8 @@ document.querySelectorAll('.quantity-button').forEach(button => {
             const data = await response.json();
             if (data.success) {
                 if (data.deleted) {
-
                     orderSection.remove();
                 } else {
-
                     quantitySpan.textContent = data.new_quantity;
                     priceSpan.textContent = data.new_item_price;
                 }
@@ -52,7 +36,7 @@ document.querySelectorAll('.quantity-button').forEach(button => {
                     document.querySelector('.cart').innerHTML = '<h2>Ваша корзина пустая</h2>';
                 }
             } else {
-                alert(data.message || 'Ошибка изменения количества');
+                showNotification(data.message || 'Ошибка изменения количества', false);
             }
         } catch (error) {
             console.error('Ошибка:', error);
@@ -81,7 +65,7 @@ document.querySelectorAll('.remove-button').forEach(button => {
                     document.querySelector('.cart').innerHTML = '<h2>Ваша корзина пустая</h2>';
                 }
             } else {
-                alert(data.message || 'Ошибка удаления');
+                showNotification(data.message || 'Ошибка удаления', false);
             }
         } catch (error) {
             console.error('Ошибка:', error);
