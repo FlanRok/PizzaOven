@@ -25,11 +25,11 @@ document.querySelectorAll('.quantity-button').forEach(button => {
                     orderSection.remove();
                 } else {
                     quantitySpan.textContent = data.new_quantity;
-                    priceSpan.textContent = data.new_item_price;
+                    priceSpan.textContent = `${data.new_item_price} ₽`;
                 }
 
                 document.getElementById('cart-total-quantity').textContent = data.total_quantity;
-                document.getElementById('cart-total-price').textContent = data.total_price;
+                document.getElementById('cart-total-price').textContent = `${data.total_price} ₽`;
                 updateCartCounter(data.total_quantity);
 
                 if (data.total_quantity === 0) {
@@ -59,7 +59,7 @@ document.querySelectorAll('.remove-button').forEach(button => {
             if (data.success) {
                 this.closest('.order-section').remove();
                 document.getElementById('cart-total-quantity').textContent = data.total_quantity;
-                document.getElementById('cart-total-price').textContent = data.total_price;
+                document.getElementById('cart-total-price').textContent = `${data.total_price} ₽`;
                 updateCartCounter(data.total_quantity);
                 if (data.total_quantity === 0) {
                     document.querySelector('.cart').innerHTML = '<h2>Ваша корзина пустая</h2>';

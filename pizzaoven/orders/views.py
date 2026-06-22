@@ -20,10 +20,11 @@ def order_create(request):
             phone = form.cleaned_data['phone']
             comment = form.cleaned_data.get('comment', '') 
             payment_method = form.cleaned_data['payment_method']
+            user = request.user
+            total_price = carts.total_price_with_discount(user)
 
-            total_price = carts.total_price()
             order = Order.objects.create(
-                user=request.user,
+                user=user,
                 total_price=total_price,
                 address=address,
                 phone=phone,
@@ -39,20 +40,30 @@ def order_create(request):
                     price=cart_item.get_price()
                 )
             carts.delete()
+            user.orders_count += 1
+            user.save()
             messages.success(request, f"Заказ #{order.id} успешно оформлен!")
             return redirect('profile')
         else:
             context = {
                 'carts': carts,
                 'form': form,
+                'total_price': carts.total_price(),
+                'total_price_discount': carts.total_price_with_discount(request.user),
+                'discount': request.user.get_discount(),
             }
             return render(request, 'orders/order_form.html', context)
     else:
         form = OrderForm()
-
+        
+    for cart in carts:
+        cart.item_price = cart.pizzas_price()
     context = {
         'carts': carts,
         'form': form,
+        'total_price': carts.total_price(),
+        'total_price_discount': carts.total_price_with_discount(request.user),
+        'discount': request.user.get_discount(),
     }
     return render(request, 'orders/order_form.html', context)
 

@@ -22,9 +22,11 @@
                 </div>
 
                 <div class="order-quantity">
-                    <button type="button" class="quantity-button decrement" data-url="{% url 'cart_change' cart.id %}">-</button>
+                    <button type="button" class="quantity-button decrement"
+                        data-url="{% url 'cart_change' cart.id %}">-</button>
                     <p class="item-quantity">{{cart.quantity}}</p>
-                    <button type="button" class="quantity-button increment" data-url="{% url 'cart_change' cart.id %}">+</button>
+                    <button type="button" class="quantity-button increment"
+                        data-url="{% url 'cart_change' cart.id %}">+</button>
                 </div>
             </div>
 
@@ -42,9 +44,17 @@
                 <h3>Количество</h3>
                 <p id="cart-total-quantity">{{carts.total_quantity}}</p>
             </div>
+
+            {% if discount %}
+            <div class="row">
+                <h3> Скидка</h3>
+                <p>{{discount}}%</p>
+            </div>
+            {% endif %}
+        
             <div class="row">
                 <h3>Итого </h3>
-                <p id="cart-total-price">{{carts.total_price}}</p>
+                <p id="cart-total-price">{{total_price}}</p>
             </div>
             <a href="{% url 'orders:order_create' %}" class="order-create-button">Оформить заказ</a>
         </section>
@@ -52,7 +62,7 @@
         <h2>Ваша корзина пустая</h1>
             {% endif %}
     </div>
-{% endblock %}
-{% block js %}
-<script src="{% static 'carts/js/cart.js' %}"></script>
-{% endblock %}
+    {% endblock %}
+    {% block js %}
+    <script src="{% static 'carts/js/cart.js' %}"></script>
+    {% endblock %}

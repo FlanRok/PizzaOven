@@ -7,11 +7,11 @@
 {% block main %}
 <div class="profile-wrapper">
   <div class="modal" id="orderModal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <div id="modal-body"></div>
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="modal-body"></div>
+    </div>
   </div>
-</div>
   <div class="form-wrapper">
     <form action="{% url 'profile' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
@@ -22,6 +22,10 @@
         {% endif %}
         <div class="input-item">
           <input type="file" id="id_image" name="image" accept="image/*" />
+        </div>
+        <div class="loyal-wrapper">
+          <p class="loyal-item">Всего заказов: <span>{{ user.orders_count }}</span></p>
+          <p class="loyal-item">Ваша скидка: <span>{{ user.get_discount }}%</span></p>
         </div>
         <div class="input-item">
           <label for="id_first_name">Имя</label>
@@ -51,6 +55,6 @@
   <div class="orders-wrapper">{% include 'orders/order_list.html' %}</div>
 </div>
 {% endblock %}
-{% block js %} 
+{% block js %}
 <script src="{% static 'users/js/profile.js' %}"></script>
 {% endblock %}

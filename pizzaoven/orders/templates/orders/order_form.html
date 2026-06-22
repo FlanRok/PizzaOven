@@ -11,11 +11,14 @@
             <h2>Ваш заказ</h2>
             {% for cart in carts %}
             <div class="order-item-preview">
-                <p>{{ cart.pizza.name }} ({{ cart.get_size_display }}) x{{ cart.quantity }} = <span>{{ cart.pizzas_price}} ₽</span>
+                <p>{{ cart.pizza.name }} ({{ cart.get_size_display }}) x{{ cart.quantity }} = <span>{{ cart.item_price}} ₽</span>
                 </p>
             </div>
             {% endfor %}
-            <p><strong>Итого: {{ carts.total_price }} ₽</strong></p>
+            <div class="price-wrapper">
+                <p><strong>Итого: <span>{{ total_price }} ₽</span></strong></p>
+                <p><strong >Итого с учетом скидки: <span>{{ total_price_discount }} ₽</span></strong></p>
+            </div>
         </div>
 
         <form method="post">
@@ -41,14 +44,9 @@
             </div>
             <div class="form-group">
                 <label for="payment_method">Способ оплаты *</label>
-                <select id="payment_method"  name="payment_method" required>
-                    <option value="cash">
-                        Наличными при получении
-                    </option>
-
-                    <option value="card">
-                        Банковская карта
-                    </option>
+                <select id="payment_method" name="payment_method" required>
+                    <option value="cash">Наличными при получении</option>
+                    <option value="card">Картой при получении</option>
                 </select>
                 {{ form.payment_method.errors }}
             </div>

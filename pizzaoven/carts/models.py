@@ -1,12 +1,22 @@
 from django.db import models
 from catalog.models import Pizza
 from users.models import User
+from decimal import Decimal
 
 # Create your models here.
 
 class CartQuerySet(models.QuerySet):
     def total_price(self):
         return sum(cart.pizzas_price() for cart in self)
+    
+    def total_price_with_discount(self, user):
+
+        total = Decimal('0')
+
+        for cart in self:
+            total += cart.pizzas_price_with_discount(user)
+
+        return round(total, 2)
     
     def total_quantity(self):
         if self:
@@ -45,6 +55,14 @@ class Cart(models.Model):
     
     def pizzas_price(self):
         return round(self.get_price() * self.quantity, 2)
+    
+    def pizzas_price_with_discount(self, user):
+        price = self.pizzas_price()
+        discount = user.get_discount()
+        
+        if discount:
+            price -= price * Decimal(discount) / 100
+        return round(price, 2)
     
     def __str__(self):
         return f"Корзина {self.user.username} | Пицца {self.pizza.name} | Количество {self.quantity}"

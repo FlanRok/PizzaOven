@@ -23,7 +23,6 @@
     display: flex;
     flex-direction: column;
     gap:10px;
-    border-bottom: 2px dashed white;
     margin-bottom: 10px;
 }
 
@@ -108,4 +107,15 @@ form{
     display: flex;
     flex-direction: column;
     gap:10px;
+}
+.price-wrapper{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.price-wrapper strong{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom:2px solid white;
 }

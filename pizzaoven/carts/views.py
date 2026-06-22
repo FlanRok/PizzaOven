@@ -9,8 +9,12 @@ MAX_TOTAL_QUANTITY = 100
 def cart(request):
     carts = Cart.objects.filter(user=request.user)
     context = {
-        'carts': carts
+        'carts': carts,
+        'discount': request.user.get_discount(),
+        'total_price': carts.total_price_with_discount(request.user),
+        'total_price_discount': carts.total_price_with_discount(request.user)
     }
+    
     return render(request, "carts/cart.html", context)
 
 def cart_add(request, pizza_slug):
@@ -99,7 +103,7 @@ def cart_change(request, cart_id):
             cart.delete()
             carts = Cart.objects.filter(user=request.user)
             total_quantity = carts.total_quantity()
-            total_price = carts.total_price()
+            total_price = carts.total_price_with_discount(request.user)
             return JsonResponse({
                 'success': True,
                 'deleted': True,
@@ -114,7 +118,7 @@ def cart_change(request, cart_id):
 
     carts = Cart.objects.filter(user=request.user)
     total_quantity = carts.total_quantity()
-    total_price = carts.total_price()
+    total_price = carts.total_price_with_discount(request.user)
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({
@@ -129,13 +133,19 @@ def cart_change(request, cart_id):
         return redirect('cart')
 
 def cart_remove(request, cart_id):
+    
     if request.user.is_authenticated:
+        if request.method != "DELETE":
+            return JsonResponse({
+                'success': False,
+                'message': 'Неверный запрос'
+            })
         cart = get_object_or_404(Cart, id=cart_id, user=request.user)
         cart.delete()
         
         carts = Cart.objects.filter(user=request.user)
         total_quantity = carts.total_quantity()
-        total_price = carts.total_price()
+        total_price = carts.total_price_with_discount(request.user)
         
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({
