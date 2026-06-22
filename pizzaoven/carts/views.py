@@ -2,10 +2,13 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from catalog.models import Pizza
 from carts.models import Cart
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 MAX_QUANTITY = 30
 MAX_TOTAL_QUANTITY = 100
+
+@login_required
 def cart(request):
     carts = Cart.objects.filter(user=request.user)
     context = {
@@ -17,6 +20,7 @@ def cart(request):
     
     return render(request, "carts/cart.html", context)
 
+@login_required
 def cart_add(request, pizza_slug):
     pizza = Pizza.objects.get(slug=pizza_slug)
     size = request.POST.get('size')
@@ -72,6 +76,7 @@ def cart_add(request, pizza_slug):
             return JsonResponse({'success': False, 'message': 'Необходимо войти в систему'}, status=403)
         return redirect('login')
 
+@login_required
 def cart_change(request, cart_id):
     if not request.user.is_authenticated:
         return JsonResponse({'success': False, 'message': 'Войдите в систему'}, status=403)
@@ -132,6 +137,7 @@ def cart_change(request, cart_id):
     else:
         return redirect('cart')
 
+@login_required
 def cart_remove(request, cart_id):
     
     if request.user.is_authenticated:

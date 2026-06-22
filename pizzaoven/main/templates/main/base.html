@@ -63,10 +63,11 @@
       </div>
 
       <div class="mobile-actions">
+        {% if user.is_authenticated %}
         <a href="{% url 'cart' %}" class="mobile-cart-link">
           <i class="fa fa-shopping-cart"></i>
-
         </a>
+        {% endif %}
         <label for="burger-toggle" class="burger-icon">
           <span></span><span></span><span></span>
         </label>
