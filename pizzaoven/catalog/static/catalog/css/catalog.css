@@ -96,17 +96,18 @@ select, .reset-btn {
 }
 
 .modal{
-    z-index: 2;
+    z-index: 1001;
     display: none;
     position: fixed;
-    top:50%;
+    top: 15%;  
     left:50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     background-color: white;
     border: 2px solid var(--header-border-color);
     border-radius: 15px;
     width: 35%;
-    height: 450px;
+    max-height: 70vh;  
+    overflow-y: auto;   
     min-height: 300px;
     padding: 25px;
 }
@@ -145,10 +146,11 @@ select, .reset-btn {
 
 .cards-wrapper {
     display: flex;
-    gap: 5px;
+    gap: 20px;
     margin-inline: var(--margin-inline);
     padding-block: 50px;
     flex-wrap: wrap;
+    justify-content: center; 
 }
 
 .card {
@@ -161,6 +163,7 @@ select, .reset-btn {
     justify-content: space-between;
     gap: 15px;
     padding: 10px 10px 20px 10px;
+    box-sizing: border-box;
 
 }
 .card-content{
@@ -251,6 +254,7 @@ select, .reset-btn {
 .to-cart-button:active {
     transform: scale(1);
 }
+
 @keyframes slideDown {
   0% {
     background-position: 0 0;
@@ -259,11 +263,16 @@ select, .reset-btn {
     background-position: 0 100%;   
   }
 }
+@media (max-width: 1400px) and (min-width: 1025px) {
+    .card {
+        width: 30%;
+    }
+}
 
 @media (max-width: 1024px) {
   .hero-section {
     padding: 80px 20px;
-    background-attachment: scroll; /* фикс для мобильных */
+    background-attachment: scroll;
   }
   .hero-section h1 {
     font-size: 32px;
@@ -279,7 +288,7 @@ select, .reset-btn {
     justify-content: center;
   }
   .card {
-    width: 45%; /* две карточки в ряд */
+    width: 45%;
   }
   .modal {
     width: 50%;
@@ -287,7 +296,6 @@ select, .reset-btn {
   }
 }
 
-/* Мобильные устройства (ширина до 768px) */
 @media (max-width: 768px) {
   .hero-section {
     padding: 60px 15px;
@@ -305,7 +313,6 @@ select, .reset-btn {
     width: 80px;
   }
 
-  /* Панель фильтров – уже есть, но донастроим */
   .filter-sort-panel {
     margin: 20px 15px;
     padding: 15px;
@@ -333,7 +340,6 @@ select, .reset-btn {
     margin-left: 5px;
   }
 
-  /* Карточки пицц – одна в ряд */
   .cards-wrapper {
     margin-inline: 15px;
     padding-block: 30px;
@@ -362,7 +368,6 @@ select, .reset-btn {
     padding: 8px 12px;
   }
 
-  /* Модальное окно */
   .modal {
     width: 85%;
     top: 15%;
@@ -387,7 +392,6 @@ select, .reset-btn {
   }
 }
 
-/* Очень маленькие телефоны (до 480px) */
 @media (max-width: 480px) {
   .hero-section h1 {
     font-size: 24px;
