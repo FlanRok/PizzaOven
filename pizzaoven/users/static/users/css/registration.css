@@ -139,6 +139,9 @@ body {
   margin: 0.8rem 0 0.2rem;
   border-top: 1px solid #eff3f8;
 }
+.checkbox-wrapper{
+  font-size: 1.2rem;
+}
 
 @media (max-width: 480px) {
   .register-card {

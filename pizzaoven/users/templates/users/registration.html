@@ -95,6 +95,11 @@
           {% if form.password2.errors %} {{form.password2.errors}} {% endif %}
         </div>
 
+        <div class="checkbox-wrapper">
+          <label for="checkbox">Вы согласны на обработку персональных данных?</label>
+          <input type="checkbox" id="checkbox" required/>
+        </div>
+
         <button type="submit" class="register-btn">Зарегистрироваться</button>
 
         <div class="simple-divider"></div>

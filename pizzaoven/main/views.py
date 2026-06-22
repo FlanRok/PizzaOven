@@ -8,7 +8,7 @@ from .forms import ContactForm
 # Create your views here.
 def index(request):
     context = {
-        'new_pizzas': Pizza.objects.filter(is_new=True)[:4]
+        'new_pizzas': Pizza.objects.filter(is_new=True)[:3]
     }
     return render(request, "main/index.html", context)
 

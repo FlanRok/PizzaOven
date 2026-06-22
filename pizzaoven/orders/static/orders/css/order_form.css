@@ -119,3 +119,99 @@ form{
     justify-content: space-between;
     border-bottom:2px solid white;
 }
+
+@media (max-width: 768px) {
+    .order-form-inner-wrapper {
+        padding: 20px;
+        width: 90%;
+        max-width: 600px;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+
+    .order-form-inner-wrapper h1 {
+        min-width: unset;
+        font-size: 28px;
+    }
+
+    .cart-preview h2 {
+        font-size: 24px;
+    }
+
+    .order-item-preview p,
+    .price-wrapper p,
+    p {
+        font-size: 20px;
+        flex-wrap: wrap;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        font-size: 18px;
+        padding: 12px;
+    }
+
+    .order-submit-button {
+        font-size: 18px;
+        padding: 12px 0;
+    }
+
+    .price-wrapper strong {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-form-inner-wrapper {
+        padding: 15px;
+        width: 95%;
+    }
+
+    .order-form-inner-wrapper h1 {
+        font-size: 24px;
+    }
+
+    .cart-preview h2 {
+        font-size: 20px;
+    }
+
+    .order-item-preview p,
+    .price-wrapper p,
+    p {
+        font-size: 17px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .order-submit-button {
+        font-size: 16px;
+        padding: 14px 0;
+    }
+
+    .price-wrapper strong {
+        font-size: 18px;
+        flex-direction: column;
+        align-items: flex-start;
+        border-bottom: 2px solid white;
+        padding-bottom: 6px;
+    }
+
+    .price-wrapper strong span {
+        align-self: flex-end;
+    }
+
+    .order-item-preview p {
+        word-break: break-word;
+    }
+
+    .form-group select {
+        appearance: auto;
+    }
+}
