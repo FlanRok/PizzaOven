@@ -29,7 +29,7 @@ class Pizza(models.Model):
     is_new = models.BooleanField(default=False, verbose_name="Новинка")
     is_spicy = models.BooleanField(default=False, verbose_name="Острая")
     is_vegetarian = models.BooleanField(default=False, verbose_name="Вегетарианская")
-    image_url = models.URLField(blank=True, verbose_name="URL изображения")
+    image = models.ImageField(upload_to='pizzas/', blank=True, null=True, verbose_name="Изображение")
     order = models.IntegerField(default=0, verbose_name="Порядок отображения")
     
     class Meta:
