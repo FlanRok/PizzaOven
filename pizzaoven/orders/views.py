@@ -12,6 +12,9 @@ def order_create(request):
     if not carts.exists():
         messages.error(request, "Ваша корзина пуста")
         return redirect('cart')
+    
+    for cart in carts:
+        cart.item_price = cart.pizzas_price()
 
     if request.method == 'POST':
         form = OrderForm(request.POST)

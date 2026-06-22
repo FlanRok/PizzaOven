@@ -66,7 +66,7 @@ class OrderForm(forms.ModelForm):
         
         if not re.match(r'^\+\d{11}$', cleaned):
             raise forms.ValidationError(
-                'Введите корректный номер телефона в формате'
+                'Введите корректный номер телефона'
             )
         
         return cleaned
